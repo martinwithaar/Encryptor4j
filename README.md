@@ -154,3 +154,10 @@ encryptor.setPrependIV(false);
 ```
 
 **Note:** Constructing an *Encryptor* with an explicit IV will set `prependIV` to `false` automatically.
+
+## Unlimited Strength Jurisdiction Policy
+In order to use 256-bit keys with AES encryption you should download and install custom policy files made available by Oracle:
+
+* Visit http://www.oracle.com/technetwork/java/javase/downloads/index.html
+* Scroll down and download the Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy Files
+* Installation instructions are included in the downloadable zip file
