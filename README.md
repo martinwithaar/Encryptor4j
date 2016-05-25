@@ -3,9 +3,7 @@ Strong encryption for Java simplified
 
 ## Overview
 Encryptor4j consists of a set of wrapper and utility classes that make leveraging cryptography in your application alot easier.
-It enables developers to encrypt and decrypt with little room for error and using few lines of code.
-
-It supports all popular encryption algorithms such as AES, DES, RSA etc.
+It enables developers to encrypt and decrypt with little room for error, using few lines of code and supports all popular encryption algorithms such as AES, DES, RSA etc.
 
 ## Encryption
 *Encryptor* is a small wrapper class for Java that greatly reduces boilerplate when implementing cryptography in an application.
@@ -156,7 +154,7 @@ encryptor.setPrependIV(false);
 **Note:** Constructing an *Encryptor* with an explicit IV will set `prependIV` to `false` automatically.
 
 ## Best practices
-Encryption does not guarantee security out-of-the-box. A certain level of understanding is required to choose the correct algorithm, block cipher mode, key size etc.
+Encryption does not guarantee security out-of-the-box. A certain degree of understanding is required to choose the correct algorithm, block cipher mode, key size etc.
 
 **Here are some tips:**
 * Do not use DES; see https://en.wikipedia.org/wiki/Data_Encryption_Standard#Security_and_cryptanalysis 
