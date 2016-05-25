@@ -26,7 +26,7 @@ public abstract class KeyAgreementPeer {
 	 */
 	
 	/**
-	 * 
+	 * <p>Constructs a key agreement peer.</p>
 	 * @param keyAgreement
 	 * @throws GeneralSecurityException
 	 */

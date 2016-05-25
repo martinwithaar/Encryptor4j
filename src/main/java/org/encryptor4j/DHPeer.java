@@ -10,7 +10,7 @@ import javax.crypto.KeyAgreement;
 import javax.crypto.spec.DHParameterSpec;
 
 /**
- * 
+ * <p><code>KeyAgreementPeer</code> implementation that uses the Diffie-Hellman key agreement protocol.</p>
  * @author Martin
  *
  */
@@ -31,16 +31,37 @@ public class DHPeer extends KeyAgreementPeer {
 	 */
 	
 	/**
-	 * 
+	 * <p>Constructs a <code>DHPeer</code> instance using primes <code>p</code> and <code>g</code>.</p>
+	 * <p><b>Note:</b> Use {@link BigInteger#probablePrime(int, java.util.Random)} to create good <code>p</code> and <code>g</code> candidates.</p>
 	 * @param p
 	 * @param g
 	 * @throws GeneralSecurityException 
 	 */
 	public DHPeer(BigInteger p, BigInteger g) throws GeneralSecurityException {
-		super(KeyAgreement.getInstance(ALGORITHM, PROVIDER));
+		super(KeyAgreement.getInstance(ALGORITHM));
 		this.p = p;
 		this.g = g;
 		initialize();
+	}
+	
+	/*
+	 * Class methods
+	 */
+	
+	/**
+	 * <p>Returns prime <code>p</code>.</p>
+	 * @return
+	 */
+	public BigInteger getP() {
+		return p;
+	}
+	
+	/**
+	 * <p>Returns prime <code>g</code>.</p>
+	 * @return
+	 */
+	public BigInteger getG() {
+		return g;
 	}
 	
 	/*
@@ -49,7 +70,7 @@ public class DHPeer extends KeyAgreementPeer {
 	
 	@Override
 	protected KeyPair createKeyPair() throws GeneralSecurityException {
-		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM);
 	    keyGen.initialize(new DHParameterSpec(p, g), new SecureRandom());
 		return keyGen.generateKeyPair();
 	}

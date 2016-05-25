@@ -13,8 +13,13 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
+ * <p>Unit test that tests key agreement algorithms such as Diffie-Hellman and Elliptic Curve Diffie-Hellman.</p>
+ * <p><b>Note:</b> This unit test does not contain MQV and ECMQV test methods because these algorithms are considered insecure and thus obsolete.</p>
  * 
  * @author Martin
+ * @see https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange
+ * @see https://en.wikipedia.org/wiki/Elliptic_curve_Diffie%E2%80%93Hellman
+ * @see https://en.wikipedia.org/wiki/MQV
  *
  */
 public class KeyAgreementTest {
@@ -25,7 +30,7 @@ public class KeyAgreementTest {
 	
 	@Test public void testDH() throws GeneralSecurityException {
 		
-		// Create p & g
+		// Create primes p & g
 		int bitLength = 512;
 	    SecureRandom random = new SecureRandom();
 	    BigInteger p = BigInteger.probablePrime(bitLength, random);

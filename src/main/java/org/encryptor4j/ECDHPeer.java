@@ -16,7 +16,7 @@ import javax.crypto.KeyAgreement;
 import org.bouncycastle.jce.ECNamedCurveTable;
 
 /**
- * 
+ * <p><code>KeyAgreementPeer</code> implementation that uses the Elliptic Curve Diffie-Hellman key agreement protocol.</p>
  * @author Martin
  *
  */
@@ -36,7 +36,7 @@ public class ECDHPeer extends KeyAgreementPeer {
 	 */
 	
 	/**
-	 * 
+	 * <p>Constructs a <code>ECDHPeer</code> instance using elliptic curve <code>curve</code>.</p>
 	 * @param curve
 	 * @throws GeneralSecurityException 
 	 */
@@ -45,7 +45,7 @@ public class ECDHPeer extends KeyAgreementPeer {
 	}
 	
 	/**
-	 * 
+	 * <p>Constructs a <code>ECDHPeer</code> instance using a custom elliptic curve.</p>
 	 * @param p
 	 * @param a
 	 * @param b
@@ -60,14 +60,26 @@ public class ECDHPeer extends KeyAgreementPeer {
 	}
 	
 	/**
-	 * 
+	 * <p>Constructs a <code>ECDHPeer</code> instance using an elliptic curve <code>AlgorithmParameterSpec</code>.</p>
 	 * @param spec
 	 * @throws GeneralSecurityException 
 	 */
 	public ECDHPeer(AlgorithmParameterSpec spec) throws GeneralSecurityException {
-		super(KeyAgreement.getInstance(ALGORITHM, PROVIDER));
+		super(KeyAgreement.getInstance(ALGORITHM));
 		this.spec = spec;
 		initialize();
+	}
+	
+	/*
+	 * Class methods
+	 */
+	
+	/**
+	 * <p>Returns the inner <code>AlgorithmParameterSpec</code>.</p>
+	 * @return
+	 */
+	public AlgorithmParameterSpec getAlgorithmParameterSpec() {
+		return spec;
 	}
 	
 	/*
@@ -76,7 +88,7 @@ public class ECDHPeer extends KeyAgreementPeer {
 	
 	@Override
 	protected KeyPair createKeyPair() throws GeneralSecurityException {
-		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM);
 	    keyGen.initialize(spec, new SecureRandom());
 		return keyGen.generateKeyPair();
 	}

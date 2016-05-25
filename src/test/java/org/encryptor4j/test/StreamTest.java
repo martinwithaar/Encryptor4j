@@ -38,8 +38,8 @@ public class StreamTest {
 	}
 	
 	@Test public void testAES_CTR() throws GeneralSecurityException, IOException {
-		SecretKey key = Encryptor.generateSecretKey("AES", AES_KEY_SIZE);
-		Encryptor encryptor = new Encryptor(key, "AES/CTR/NoPadding", AES_IV_SIZE);
+		SecretKey secretKey = Encryptor.generateSecretKey("AES", AES_KEY_SIZE);
+		Encryptor encryptor = new Encryptor(secretKey, "AES/CTR/NoPadding", AES_IV_SIZE);
 		encryptor.setAlgorithmProvider("BC");
 		
 		InputStream is = null;
@@ -63,7 +63,7 @@ public class StreamTest {
 		}
 		
 		try {
-			encryptor = new Encryptor(key, "AES/CTR/NoPadding", AES_IV_SIZE);
+			encryptor = new Encryptor(secretKey, "AES/CTR/NoPadding", AES_IV_SIZE);
 			encryptor.setAlgorithmProvider("BC");
 			is = encryptor.wrapInputStream(new FileInputStream(FILENAME_ENCRYPTED));
 			os = new FileOutputStream(FILENAME_DECRYPTED);

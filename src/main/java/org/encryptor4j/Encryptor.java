@@ -394,7 +394,7 @@ public class Encryptor {
     
     /**
      * <p>Generates and returns a random 256-bit AES key.</p>
-     * <p>Note: Unlimited Strength Policy must be in place when using with default Java algorithm provider
+     * <p><b>Note:</b> Unlimited Strength Policy must be in place when using with default Java algorithm provider
      * in order to avoid the 128 bit AES key length restriction.</p>
      * @return
      * @throws NoSuchAlgorithmException
@@ -412,8 +412,8 @@ public class Encryptor {
      * @throws NoSuchAlgorithmException
      */
     public static final SecretKey generateSecretKey(String algorithm, int size) throws NoSuchAlgorithmException {
-		KeyGenerator keyGen = KeyGenerator.getInstance(algorithm);
-    	keyGen.init(size);
-    	return keyGen.generateKey();
+		KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm);
+		keyGenerator.init(size);
+    	return keyGenerator.generateKey();
     }
 }
