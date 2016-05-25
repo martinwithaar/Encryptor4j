@@ -1,5 +1,5 @@
 # Encryptor4j
-Simplified strong encryption for Java
+Strong encryption for Java simplified
 
 ## Overview
 Encryptor4j consists of a set of wrapper and utility classes that make leveraging cryptography in your application alot easier.
