@@ -23,7 +23,6 @@ import org.bouncycastle.jce.ECNamedCurveTable;
 public class ECDHPeer extends KeyAgreementPeer {
 	
 	private static final String ALGORITHM = "ECDH";
-	private static final String PROVIDER = "BC";
 	
 	/*
 	 * Attributes
@@ -36,12 +35,13 @@ public class ECDHPeer extends KeyAgreementPeer {
 	 */
 	
 	/**
-	 * <p>Constructs a <code>ECDHPeer</code> instance using elliptic curve <code>curve</code>.</p>
+	 * <p>Constructs a <code>ECDHPeer</code> instance using a named elliptic curve <code>curve</code>.</p>
+	 * <p><b>Note:</b> This constructor will use Bouncy Castle (BC) as its provider.</p>
 	 * @param curve
 	 * @throws GeneralSecurityException 
 	 */
 	public ECDHPeer(String curve) throws GeneralSecurityException {
-		this(ECNamedCurveTable.getParameterSpec(curve));
+		this(ECNamedCurveTable.getParameterSpec(curve), "BC");
 	}
 	
 	/**
@@ -56,7 +56,7 @@ public class ECDHPeer extends KeyAgreementPeer {
 	 * @throws GeneralSecurityException 
 	 */
 	public ECDHPeer(BigInteger p, BigInteger a, BigInteger b, BigInteger xg, BigInteger yg, BigInteger n, int h) throws GeneralSecurityException {
-	    this(new ECParameterSpec(new EllipticCurve(new ECFieldFp(p), a, b), new ECPoint(xg, yg), n, h));
+	    this(new ECParameterSpec(new EllipticCurve(new ECFieldFp(p), a, b), new ECPoint(xg, yg), n, h), null);
 	}
 	
 	/**
@@ -65,7 +65,17 @@ public class ECDHPeer extends KeyAgreementPeer {
 	 * @throws GeneralSecurityException 
 	 */
 	public ECDHPeer(AlgorithmParameterSpec spec) throws GeneralSecurityException {
-		super(KeyAgreement.getInstance(ALGORITHM));
+		this(spec, null);
+	}
+	
+	/**
+	 * <p>Constructs a <code>ECDHPeer</code> instance using an elliptic curve <code>AlgorithmParameterSpec</code> and a custom provider.</p>
+	 * @param spec
+	 * @param provider
+	 * @throws GeneralSecurityException 
+	 */
+	public ECDHPeer(AlgorithmParameterSpec spec, String provider) throws GeneralSecurityException {
+		super(provider != null ? KeyAgreement.getInstance(ALGORITHM, provider) : KeyAgreement.getInstance(ALGORITHM));
 		this.spec = spec;
 		initialize();
 	}
@@ -88,7 +98,7 @@ public class ECDHPeer extends KeyAgreementPeer {
 	
 	@Override
 	protected KeyPair createKeyPair() throws GeneralSecurityException {
-		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM);
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM, getKeyAgreement().getProvider());
 	    keyGen.initialize(spec, new SecureRandom());
 		return keyGen.generateKeyPair();
 	}

@@ -17,7 +17,6 @@ import javax.crypto.spec.DHParameterSpec;
 public class DHPeer extends KeyAgreementPeer {
 	
 	private static final String ALGORITHM = "DH";
-	private static final String PROVIDER = "BC";
 	
 	/*
 	 * Attributes
@@ -38,7 +37,18 @@ public class DHPeer extends KeyAgreementPeer {
 	 * @throws GeneralSecurityException 
 	 */
 	public DHPeer(BigInteger p, BigInteger g) throws GeneralSecurityException {
-		super(KeyAgreement.getInstance(ALGORITHM));
+		this(p, g, null);
+	}
+	
+	/**
+	 * <p>Constructs a <code>DHPeer</code> instance using primes <code>p</code> and <code>g</code>.</p>
+	 * <p><b>Note:</b> Use {@link BigInteger#probablePrime(int, java.util.Random)} to create good <code>p</code> and <code>g</code> candidates.</p>
+	 * @param p
+	 * @param g
+	 * @throws GeneralSecurityException 
+	 */
+	public DHPeer(BigInteger p, BigInteger g, String provider) throws GeneralSecurityException {
+		super(provider != null ? KeyAgreement.getInstance(ALGORITHM, provider) : KeyAgreement.getInstance(ALGORITHM));
 		this.p = p;
 		this.g = g;
 		initialize();
@@ -70,7 +80,7 @@ public class DHPeer extends KeyAgreementPeer {
 	
 	@Override
 	protected KeyPair createKeyPair() throws GeneralSecurityException {
-		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM);
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM, getKeyAgreement().getProvider());
 	    keyGen.initialize(new DHParameterSpec(p, g), new SecureRandom());
 		return keyGen.generateKeyPair();
 	}
