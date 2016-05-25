@@ -152,3 +152,5 @@ Disable prepending of the IV by calling:
 ```java
 encryptor.setPrependIV(false);
 ```
+
+**Note:** Constructing an *Encryptor* with an explicit IV will set `prependIV` to `false` automatically.
