@@ -28,13 +28,19 @@ public class KeyAgreementTest {
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 	}
 	
+	/**
+	 * <p>Tests Diffie-Hellman key exchange.</p>
+	 * <p>Use at least a <code>p</code> of 2048 bits. Better pre-determined values for <code>p</code> can be found at the link below.</p>
+	 * @throws GeneralSecurityException
+	 * @see https://tools.ietf.org/html/rfc3526
+	 */
 	@Test public void testDH() throws GeneralSecurityException {
 		
 		// Create primes p & g
-		int bitLength = 512;
-	    SecureRandom random = new SecureRandom();
-	    BigInteger p = BigInteger.probablePrime(bitLength, random);
-	    BigInteger g = BigInteger.probablePrime(bitLength, random);
+		// Tip: You don't need to regenerate p; Use a fixed value in your application
+		int bits = 2048;
+	    BigInteger p = BigInteger.probablePrime(bits, new SecureRandom());
+	    BigInteger g = new BigInteger("2");
 		
 		// Create two peers
 		KeyAgreementPeer peerA = new DHPeer(p, g);
