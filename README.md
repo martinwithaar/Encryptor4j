@@ -153,6 +153,12 @@ encryptor.setPrependIV(false);
 
 **Note:** Constructing an *Encryptor* with an explicit IV will set `prependIV` to `false` automatically.
 
+## Disable IV generation
+Sometimes the *Cipher* implementation used by the VM does not permit passing the IV via the algorithm parameters because it will generate it itself (such as with some versions of Android). The automatic IV generation functionality of the *Encryptor* class should then be disabled like so:
+```java
+encryptor.setGenerateIV(false);
+```
+
 ## Best practices
 Encryption does not guarantee security out-of-the-box. A certain degree of understanding is required to choose the correct algorithm, block cipher mode, key size etc.
 
