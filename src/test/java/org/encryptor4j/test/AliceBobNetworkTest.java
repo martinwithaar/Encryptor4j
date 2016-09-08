@@ -36,8 +36,8 @@ import org.junit.Test;
  */
 public class AliceBobNetworkTest {
 	
-	private static final String FILENAME = "stream_test_picture.jpg";
-	private static final String FILENAME_RECEIVED = "stream_test_picture_received.jpg";
+	private static final String FILENAME = "test_picture.jpg";
+	private static final String FILENAME_RECEIVED = "test_picture_network.jpg";
 	private static final int BUFFER_SIZE = 4 * 1024;
 	private static final int PORT = 1337;
 	static {

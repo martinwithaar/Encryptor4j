@@ -24,9 +24,9 @@ import org.junit.Test;
  */
 public class StreamTest {
 	
-	private static final String FILENAME = "stream_test_picture.jpg";
-	private static final String FILENAME_ENCRYPTED = "stream_test_picture_encrypted.jpg";
-	private static final String FILENAME_DECRYPTED = "stream_test_picture_decrypted.jpg";
+	private static final String FILENAME = "test_picture.jpg";
+	private static final String FILENAME_ENCRYPTED = "test_picture.jpg.encrypted";
+	private static final String FILENAME_DECRYPTED = "test_picture_stream.jpg";
 	private static final int AES_KEY_SIZE = 256;
 	private static final int AES_IV_SIZE = 16;
 	private static final int DES_KEY_SIZE = 64;

@@ -166,6 +166,15 @@ public class MessageTest {
 		assertEquals(message, new String(decrypted));
     }
     
+    @Test public void testTwofish() throws GeneralSecurityException {
+    	String message = "This string has been encrypted & decrypted using Twofish";
+		Encryptor encryptor = new Encryptor(Encryptor.generateSecretKey("Twofish", AES_KEY_SIZE), "Twofish");
+		encryptor.setAlgorithmProvider("BC");
+		byte[] encrypted = encryptor.encrypt(message.getBytes());
+		byte[] decrypted = encryptor.decrypt(encrypted);
+		assertEquals(message, new String(decrypted));
+    }
+    
     // ARC4
     
     @Test public void testARC4() throws GeneralSecurityException {
