@@ -133,7 +133,7 @@ Decryption:
 ```java
 String encrypted = "5Zz0WGJ5XK1YDxs7O5VX7nhBaNeFWnvz/RBxmfawammmkNZhWeTJkMIQ/RWIPDmx";
 String password = "mysupersecretpassword";
-TextEncryptor te = new TextEncryptor(encrypted);
+TextEncryptor te = new TextEncryptor(password);
 String text = te.decrypt(encrypted);
 ```
 
