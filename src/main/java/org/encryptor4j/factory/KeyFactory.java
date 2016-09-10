@@ -13,6 +13,10 @@ public interface KeyFactory {
 	 */
 	public static final KeyFactory AES = new AESKeyFactory();
 	/**
+	 * AES <code>KeyFactory</code> implementation
+	 */
+	public static final KeyFactory DES = new DESKeyFactory();
+	/**
 	 * <p>Derives and returns a strong key from a password.</p>
 	 * @param password
 	 * @return

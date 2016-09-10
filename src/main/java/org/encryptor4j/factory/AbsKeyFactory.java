@@ -59,6 +59,26 @@ public abstract class AbsKeyFactory implements KeyFactory {
 	}
 	
 	/*
+	 * Class methods
+	 */
+	
+	/**
+	 * 
+	 * @param salt
+	 */
+	public void setSalt(byte[] salt) {
+		this.salt = salt;
+	}
+	
+	/**
+	 * 
+	 * @param iterationCount
+	 */
+	public void setIterationCount(int iterationCount) {
+		this.iterationCount = iterationCount;
+	}
+	
+	/*
 	 * Interface implementations
 	 */
 	

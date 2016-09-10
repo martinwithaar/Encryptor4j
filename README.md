@@ -13,7 +13,7 @@ It handles initialization vectors (IVs) transparently by securely generating and
 Encrypting a message using AES in CBC mode is as simple as this:
 ```java
 String message = "This string has been encrypted & decrypted using AES in Cipher Block Chaining mode";
-SecretKey secretKey = Encryptor.generateSecretKey("AES", 256);
+SecretKey secretKey = KeyFactory.AES.randomKey();
 Encryptor encryptor = new Encryptor(secretKey, "AES/CBC/PKCS5Padding", 16);
 byte[] encrypted = encryptor.encrypt(message.getBytes());
 ```
@@ -21,7 +21,7 @@ byte[] encrypted = encryptor.encrypt(message.getBytes());
 Using AES in GCM mode needs an additional *tLen* value in the constructor:
 ```java
 String message = "This string has been encrypted & decrypted using AES in Galois Counter Mode";
-SecretKey secretKey = Encryptor.generateSecretKey("AES", 256);
+SecretKey secretKey = KeyFactory.AES.randomKey();
 Encryptor encryptor = new Encryptor(secretKey, "AES/GCM/NoPadding", 16, 128);
 byte[] encrypted = encryptor.encrypt(message.getBytes());
 ```
@@ -41,7 +41,7 @@ The *Encryptor* will prepend the IV transparently and use the cipher that it has
 
 The following example reads a file and writes it to another file using streaming encryption:
 ```java
-SecretKey secretKey = Encryptor.generateSecretKey("AES", 256);
+SecretKey secretKey = KeyFactory.AES.randomKey();
 Encryptor encryptor = new Encryptor(secretKey, "AES/CTR/NoPadding", 16);
 
 InputStream is = null;
@@ -65,7 +65,7 @@ try {
 }
 ```
 
-Decrypting is easy too:
+Decryption:
 ```java
 // Assuming the same secret key is used
 Encryptor encryptor = new Encryptor(secretKey, "AES/CTR/NoPadding", 16);
@@ -91,6 +91,53 @@ try {
   }
 }
 ```
+
+## Encryption utilities
+Encryptor4j comes with utility classes for performing common encryption tasks with ease.
+
+### File encryption
+The *FileEncryptor* class encrypts and decrypts files and can be invoked from the command line.
+
+Encryption:
+```java
+File srcFile = new File("original.zip");
+File destFile = new File("original.zip.encrypted");
+String password = "mysupersecretpassword";
+FileEncryptor fe = new FileEncryptor(password);
+fe.encrypt(srcFile, destFile);
+```
+
+Decryption:
+```java
+File srcFile = new File("original.zip.encrypted");
+File destFile = new File("decrypted.zip");
+String password = "mysupersecretpassword";
+FileEncryptor fe = new FileEncryptor(password);
+fe.decrypt(srcFile, destFile);
+```
+
+By default *FileEncryptor* uses AES in CTR mode with the maximum key length permitted (up to 256-bit).
+
+### Text encryption
+The *TextEncryptor* class encrypts and decrypts text using Base64 encoding for the encrypted message and can be invoked from the command line.
+
+Encryption:
+```java
+String text = "This is a secret message";
+String password = "mysupersecretpassword";
+TextEncryptor te = new TextEncryptor(password);
+String encrypted = te.encrypt(text);
+```
+
+Decryption:
+```java
+String encrypted = "5Zz0WGJ5XK1YDxs7O5VX7nhBaNeFWnvz/RBxmfawammmkNZhWeTJkMIQ/RWIPDmx";
+String password = "mysupersecretpassword";
+TextEncryptor te = new TextEncryptor(encrypted);
+String text = te.decrypt(encrypted);
+```
+
+By default *TextEncryptor* uses AES in CBC mode with the maximum key length permitted (up to 256-bit).
 
 ## Key agreement
 Key agreement protocols such as Diffie-Hellman and Elliptic Curve Diffie-Hellman have gained significant popularity in the past years.
@@ -141,7 +188,7 @@ This behavior can be overridden by using an explicit IV or by not prepending the
 
 Construct an *Encryptor* instance using an explicit IV:
 ```java
-SecretKey secretKey = Encryptor.generateSecretKey("AES", 256);
+SecretKey secretKey = KeyFactory.AES.randomKey();
 byte[] iv = new byte[] { 107, 67, 98, -81, 54, -31, -110, -63, 24, 76, -12, -48, -55, 14, 15, 19 };
 Encryptor encryptor = new Encryptor(secretKey, "AES/CBC/PKCS5Padding", iv);
 ```

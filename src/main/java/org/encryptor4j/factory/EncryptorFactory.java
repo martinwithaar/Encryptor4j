@@ -10,12 +10,14 @@ import org.encryptor4j.Encryptor;
  *
  */
 public interface EncryptorFactory {
-	
 	/**
 	 * AES <code>EncryptorFactory</code> implementation
 	 */
 	public static final EncryptorFactory AES = new AESEncryptorFactory();
-	
+	/**
+	 * DES <code>EncryptorFactory</code> implementation
+	 */
+	public static final EncryptorFactory DES = new DESEncryptorFactory();
 	/**
 	 * <p>Returns an <code>Encryptor</code> instance usable for message encryption.</p>
 	 * @param key

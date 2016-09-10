@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
+import java.security.Key;
 import java.security.Security;
-
-import javax.crypto.SecretKey;
 
 import org.apache.commons.io.FileUtils;
 import org.encryptor4j.Encryptor;
+import org.encryptor4j.factory.KeyFactory;
 import org.junit.Test;
 
 /**
@@ -27,9 +27,7 @@ public class StreamTest {
 	private static final String FILENAME = "test_picture.jpg";
 	private static final String FILENAME_ENCRYPTED = "test_picture.jpg.encrypted";
 	private static final String FILENAME_DECRYPTED = "test_picture_stream.jpg";
-	private static final int AES_KEY_SIZE = 256;
 	private static final int AES_IV_SIZE = 16;
-	private static final int DES_KEY_SIZE = 64;
 	private static final int DES_IV_SIZE = 8;
 	private static final int BUFFER_SIZE = 4 * 1024;
 
@@ -38,8 +36,8 @@ public class StreamTest {
 	}
 	
 	@Test public void testAES_CTR() throws GeneralSecurityException, IOException {
-		SecretKey secretKey = Encryptor.generateSecretKey("AES", AES_KEY_SIZE);
-		Encryptor encryptor = new Encryptor(secretKey, "AES/CTR/NoPadding", AES_IV_SIZE);
+		Key key = KeyFactory.AES.randomKey();
+		Encryptor encryptor = new Encryptor(key, "AES/CTR/NoPadding", AES_IV_SIZE);
 		encryptor.setAlgorithmProvider("BC");
 		
 		InputStream is = null;
@@ -63,7 +61,7 @@ public class StreamTest {
 		}
 		
 		try {
-			encryptor = new Encryptor(secretKey, "AES/CTR/NoPadding", AES_IV_SIZE);
+			encryptor = new Encryptor(key, "AES/CTR/NoPadding", AES_IV_SIZE);
 			encryptor.setAlgorithmProvider("BC");
 			is = encryptor.wrapInputStream(new FileInputStream(FILENAME_ENCRYPTED));
 			os = new FileOutputStream(FILENAME_DECRYPTED);
@@ -86,7 +84,7 @@ public class StreamTest {
     }
 	
 	@Test public void testDES_CTR() throws GeneralSecurityException, IOException {
-		SecretKey key = Encryptor.generateSecretKey("DES", DES_KEY_SIZE);
+		Key key = KeyFactory.DES.randomKey();
 		Encryptor encryptor = new Encryptor(key, "DES/CTR/NoPadding", DES_IV_SIZE);
 		encryptor.setAlgorithmProvider("BC");
 		

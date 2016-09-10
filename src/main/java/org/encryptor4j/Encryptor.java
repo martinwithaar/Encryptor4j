@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
@@ -14,8 +13,6 @@ import java.security.spec.KeySpec;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.ShortBufferException;
 import javax.crypto.spec.GCMParameterSpec;
@@ -401,34 +398,5 @@ public class Encryptor {
 		SecureRandom random = new SecureRandom();
     	iv = new byte[ivLength];
     	random.nextBytes(iv);
-    }
-    
-    /*
-     * Static methods
-     */
-    
-    /**
-     * <p>Generates and returns a random 256-bit AES key.</p>
-     * <p><b>Note:</b> Unlimited Strength Policy must be in place when using with default Java algorithm provider
-     * in order to avoid the 128 bit AES key length restriction.</p>
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @see <a href="http://www.javamex.com/tutorials/cryptography/unrestricted_policy_files.shtml">http://www.javamex.com/tutorials/cryptography/unrestricted_policy_files.shtml</a>
-     */
-    public static final SecretKey generateSecretKey() throws NoSuchAlgorithmException {
-    	return generateSecretKey(DEFAULT_ALGORITHM, 256);
-    }
-    
-    /**
-     * <p>Generates and returns a random key for the given algorithm and size.</p>
-     * @param algorithm
-     * @param size
-     * @return
-     * @throws NoSuchAlgorithmException
-     */
-    public static final SecretKey generateSecretKey(String algorithm, int size) throws NoSuchAlgorithmException {
-		KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm);
-		keyGenerator.init(size);
-    	return keyGenerator.generateKey();
     }
 }
