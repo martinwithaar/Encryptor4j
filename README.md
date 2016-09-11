@@ -93,7 +93,7 @@ try {
 ```
 
 ## Encryption utilities
-Encryptor4j comes with utility classes for performing common encryption tasks with ease.
+Encryptor4j comes with utility classes for performing common encryption tasks.
 
 ### File encryption
 The *FileEncryptor* class encrypts and decrypts files and can be invoked from the command line.
