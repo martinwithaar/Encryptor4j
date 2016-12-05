@@ -82,7 +82,7 @@ public class FileEncryptor {
 	/**
 	 * <p>Reads and encrypts file <code>src</code> and writes the encrypted result to file <code>dest</code>.</p>
 	 * @param src
-	 * @param dst
+	 * @param dest
 	 * @throws FileNotFoundException
 	 * @throws GeneralSecurityException
 	 * @throws IOException
