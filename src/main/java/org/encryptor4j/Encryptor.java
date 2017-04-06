@@ -22,7 +22,7 @@ import javax.crypto.spec.IvParameterSpec;
  * <p>Encryptor class that greatly simplifies strong encryption and decryption.</p>
  * <p>Supports both encryption/decryption of single messages as well as streaming encryption.
  * Handling of initialization vectors (IVs) is done transparently. You can alter this behavior
- * by calling {@link #setPrependIv(boolean)}.</p>
+ * by calling {@link #setPrependIV(boolean)}.</p>
  * <p>You can construct an <code>Encryptor</code> instance with
  * an explicit IV using i.e. {@link Encryptor#Encryptor(Key, String, byte[])} to control IV semantics manually.</p>
  * 
