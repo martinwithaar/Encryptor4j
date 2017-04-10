@@ -30,12 +30,12 @@ import org.junit.Test;
 
 /**
  * <p>Unit test that performs a key agreement with a server over a TCP socket and sends a file to the server encrypted using the agreed shared secret.</p>
- * @author Martin
  * @see https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange
+ * @author Martin
  *
  */
 public class AliceBobNetworkTest {
-	
+
 	private static final String FILENAME = "test_picture.jpg";
 	private static final String FILENAME_RECEIVED = "test_picture_network.jpg";
 	private static final int BUFFER_SIZE = 4 * 1024;
@@ -43,13 +43,13 @@ public class AliceBobNetworkTest {
 	static {
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 	}
-	
+
 	@Test public void testECDH() throws GeneralSecurityException {
-		
+
 		Runnable serverRunnable = new ServerRunnable();
 		Thread thread = new Thread(serverRunnable);
 		thread.start();
-		
+
 		// Wait until server is set up
 		synchronized(serverRunnable) {
 			try {
@@ -58,7 +58,7 @@ public class AliceBobNetworkTest {
 				e.printStackTrace();
 			}
 		}
-		
+
 		Socket socket = null;
 		InputStream is = null;
 		OutputStream os = null;
@@ -66,7 +66,7 @@ public class AliceBobNetworkTest {
 		try {
 			socket = new Socket((String) null, PORT);
 			is = socket.getInputStream();
-			
+
 			// Wait for input to arrive
 			while(is.available() == 0) {
 				try {
@@ -78,26 +78,26 @@ public class AliceBobNetworkTest {
 			// Read curve
 			ObjectInputStream ois = new ObjectInputStream(is);
 			String curve = ois.readUTF();
-			
+
 			// Read Bob's public key
 			Key publicKey = (Key) ois.readObject();
-			
+
 			// Create ECDH peer
 			KeyAgreementPeer alice = new ECDHPeer(curve);
-			
+
 			// Send Alice's public key
 			os = socket.getOutputStream();
 			ObjectOutputStream oos = new ObjectOutputStream(os);
 			oos.writeObject(alice.getPublicKey());
 			oos.flush();
-			
+
 			// Compute shared secret
 			byte[] sharedSecret = alice.computeSharedSecret(publicKey);
-			
+
 			// Create encryptor
 			SecretKey secretKey = new SecretKeySpec(sharedSecret, "AES");
 			Encryptor encryptor = new Encryptor(secretKey, "AES/CTR/NoPadding", 16);
-			
+
 			// Stream file using encryption
 			CipherOutputStream cos = encryptor.wrapOutputStream(os);
 			fis = new FileInputStream(FILENAME);
@@ -143,7 +143,7 @@ public class AliceBobNetworkTest {
 				}
 			}
 		}
-		
+
 		// Wait until server is finished
 		synchronized(serverRunnable) {
 			try {
@@ -152,7 +152,7 @@ public class AliceBobNetworkTest {
 				e.printStackTrace();
 			}
 		}
-		
+
 		try {
 			// Check if the received file equals the original
 			assertTrue(FileUtils.contentEquals(new File(FILENAME), new File(FILENAME_RECEIVED)));
@@ -160,14 +160,14 @@ public class AliceBobNetworkTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * <p>Runnable that represents the server named Bob that receives the file.</p>
 	 * @author Martin
 	 *
 	 */
 	private static class ServerRunnable implements Runnable {
-		
+
 		private static final String CURVE = "brainpoolp256r1";
 
 		@Override
@@ -179,28 +179,28 @@ public class AliceBobNetworkTest {
 			try {
 				// Create server socket & accept
 				serverSocket = new ServerSocket(PORT);
-				
+
 				// Notify that the server is setup
 				synchronized(this) {
 					notify();
 				}
-				
+
 				// Accept incoming connections
 				Socket clientSocket = serverSocket.accept();
-				
+
 				// Create ECDH peer
 				KeyAgreementPeer bob = new ECDHPeer(CURVE);
-				
+
 				// Send Bob's curve
 				os = clientSocket.getOutputStream();
 				ObjectOutputStream oos = new ObjectOutputStream(os);
 				oos.writeUTF(CURVE);
 				oos.flush();
-				
+
 				// Send Bob's public key
 				oos.writeObject(bob.getPublicKey());
 				oos.flush();
-				
+
 				// Wait for input to arrive
 				is = clientSocket.getInputStream();
 				while(is.available() == 0) {
@@ -213,14 +213,14 @@ public class AliceBobNetworkTest {
 				// Read Alice's public key
 				ObjectInputStream ois = new ObjectInputStream(is);
 				Key publicKey = (Key) ois.readObject();
-				
+
 				// Compute shared secret
 				byte[] sharedSecret = bob.computeSharedSecret(publicKey);
-				
+
 				// Create decryptor
 				SecretKey secretKey = new SecretKeySpec(sharedSecret, "AES");
 				Encryptor decryptor = new Encryptor(secretKey, "AES/CTR/NoPadding", 16);
-				
+
 				// Receive encrypted file
 				CipherInputStream cis = decryptor.wrapInputStream(is);
 				fos = new FileOutputStream(FILENAME_RECEIVED);
@@ -265,7 +265,7 @@ public class AliceBobNetworkTest {
 					}
 				}
 			}
-			
+
 			// Notify that the server is finished
 			synchronized(this) {
 				notify();

@@ -1,12 +1,12 @@
 package org.encryptor4j.factory;
 
 /**
- * <p>Factory class for creating secure keys.</p>
+ * <p>Factory class for creating secure AES keys.</p>
  * @author Martin
  *
  */
 public class AESKeyFactory extends AbsKeyFactory {
-	
+
 	public static final String ALGORITHM = "AES";
 	public static final int MAXIMUM_KEY_LENGTH = 256;
 

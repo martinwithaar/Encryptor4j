@@ -43,7 +43,7 @@ public class MessageTest {
 	
     @Test public void testAES_ECB() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using AES in Electronic Codebook mode";
-		Encryptor encryptor = new Encryptor(KeyFactory.AES.randomKey(), "AES/ECB/PKCS5Padding");
+		Encryptor encryptor = new Encryptor(KeyFactory.AES.randomKey(), "AES/ECB/PKCS7Padding");
 		encryptor.setAlgorithmProvider("BC");
 		byte[] encrypted = encryptor.encrypt(message.getBytes());
 		byte[] decrypted = encryptor.decrypt(encrypted);
@@ -52,7 +52,7 @@ public class MessageTest {
     
     @Test public void testAES_CBC() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using AES in Cipher Block Chaining mode";
-		Encryptor encryptor = new Encryptor(KeyFactory.AES.randomKey(), "AES/CBC/PKCS5Padding", 16);
+		Encryptor encryptor = new Encryptor(KeyFactory.AES.randomKey(), "AES/CBC/PKCS7Padding", 16);
 		encryptor.setAlgorithmProvider("BC");
 		byte[] encrypted = encryptor.encrypt(message.getBytes());
 		byte[] decrypted = encryptor.decrypt(encrypted);

@@ -18,60 +18,60 @@ import org.encryptor4j.factory.EncryptorFactory;
 import org.encryptor4j.factory.KeyFactory;
 
 /**
- * 
+ *
  * @author Martin
  *
  */
 public class TextEncryptor {
-	
+
 	/*
 	 * Attributes
 	 */
-	
+
 	private Encryptor encryptor;
-	
+
 	/*
 	 * Constructor(s)
 	 */
-	
+
 	/**
 	 * <p>Constructs a default AES <code>TextEncryptor</code> instance using a randomly generated key. Obtain the key by calling {@link #getEncryptor()} and {@link Encryptor#getKey()}.</p>
 	 */
 	public TextEncryptor() {
 		this(KeyFactory.AES.randomKey());
 	}
-	
+
 	/**
 	 * <p>Constructs a default AES <code>TextEncryptor</code> instance using the given password.</p>
-	 * @param password
+	 * @param password the password used for encryption
 	 */
 	public TextEncryptor(String password) {
 		this(KeyFactory.AES.keyFromPassword(password.toCharArray()));
 	}
-	
+
 	/**
 	 * <p>Constructs a default AES <code>TextEncryptor</code> instance using the given AES key.</p>
-	 * @param key
+	 * @param key the key used for encryption
 	 */
 	public TextEncryptor(Key key) {
 		this(EncryptorFactory.AES.messageEncryptor(key));
 	}
-	
+
 	/**
 	 * <p>Constructs a <code>TextEncryptor</code> instance using the given <code>Encryptor</code>.</p>
-	 * @param encryptor
+	 * @param encryptor the encryptor used for encryption
 	 */
 	public TextEncryptor(Encryptor encryptor) {
 		this.encryptor = encryptor;
 	}
-	
+
 	/*
 	 * Class methods
 	 */
-	
+
 	/**
 	 * <p>Encrypts and Base64 encodes a message.</p>
-	 * @param message
+	 * @param message the message
 	 * @return the encrypted message
 	 * @throws GeneralSecurityException
 	 */
@@ -79,7 +79,7 @@ public class TextEncryptor {
 		byte[] bytes = encryptor.encrypt(message.getBytes());
 		return Base64.getEncoder().encodeToString(bytes);
 	}
-	
+
 	/**
 	 * <p>Base64 decodes and decrypts an encrypted message.</p>
 	 * @param message an encrypted message
@@ -90,7 +90,7 @@ public class TextEncryptor {
 		byte[] bytes = Base64.getDecoder().decode(message);
 		return new String(encryptor.decrypt(bytes));
 	}
-	
+
 	/**
 	 * <p>Returns the encryptor.</p>
 	 * @return
@@ -98,13 +98,13 @@ public class TextEncryptor {
 	public Encryptor getEncryptor() {
 		return encryptor;
 	}
-	
+
 	/*
 	 * Static methods
 	 */
-	
+
 	/**
-	 * 
+	 *
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -118,14 +118,14 @@ public class TextEncryptor {
 				.required()
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("d")
 				.longOpt("decrypt")
 				.desc("decrypt")
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("p")
 				.longOpt("password")
@@ -134,7 +134,7 @@ public class TextEncryptor {
 				.desc("password")
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("k")
 				.longOpt("key")
@@ -143,7 +143,7 @@ public class TextEncryptor {
 				.desc("Base64 encoded key")
 				.build()
 		);
-		
+
 		if(args != null && args.length > 0) {
 			CommandLineParser parser = new DefaultParser();
 			CommandLine cmd;
@@ -152,9 +152,9 @@ public class TextEncryptor {
 			} catch (ParseException e) {
 				throw new RuntimeException("Could not parse args", e);
 			}
-			
+
 			String text = cmd.getOptionValue("t");
-			
+
 			TextEncryptor te;
 			if(cmd.hasOption("p")) {
 				te = new TextEncryptor(cmd.getOptionValue("p"));

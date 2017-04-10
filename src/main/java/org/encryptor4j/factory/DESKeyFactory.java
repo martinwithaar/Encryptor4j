@@ -1,12 +1,12 @@
 package org.encryptor4j.factory;
 
 /**
- * <p>Factory class for creating secure keys.</p>
+ * <p>Factory class for creating secure DES keys.</p>
  * @author Martin
  *
  */
 public class DESKeyFactory extends AbsKeyFactory {
-	
+
 	public static final String ALGORITHM = "DES";
 	public static final int MAXIMUM_KEY_LENGTH = 64;
 

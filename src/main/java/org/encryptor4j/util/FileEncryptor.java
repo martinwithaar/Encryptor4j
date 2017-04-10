@@ -30,59 +30,59 @@ import org.encryptor4j.factory.KeyFactory;
  *
  */
 public class FileEncryptor {
-	
+
 	/*
 	 * Attributes
 	 */
-	
+
 	private Encryptor encryptor;
 	private int bufferSize;
-	
+
 	/*
 	 * Constructor(s)
 	 */
-	
+
 	/**
 	 * <p>Constructs a default AES <code>FileEncryptor</code> instance using a randomly generated key. Obtain the key by calling {@link #getEncryptor()} and {@link Encryptor#getKey()}.</p>
 	 */
 	public FileEncryptor() {
 		this(KeyFactory.AES.randomKey());
 	}
-	
+
 	/**
 	 * <p>Constructs a default AES <code>FileEncryptor</code> instance using the given password.</p>
-	 * @param password
+	 * @param password the password used for encryption/decryption
 	 */
 	public FileEncryptor(String password) {
 		this(KeyFactory.AES.keyFromPassword(password.toCharArray()));
 	}
-	
+
 	/**
 	 * <p>Constructs a default AES <code>FileEncryptor</code> instance using the given AES key.</p>
-	 * @param key
+	 * @param key the key used for encryption/decryption
 	 */
 	public FileEncryptor(Key key) {
 		this(EncryptorFactory.AES.streamEncryptor(key));
 	}
-	
+
 	/**
 	 * <p>Constructs a default <code>FileEncryptor</code> instance using the given <code>Encryptor</code>.</p>
-	 * @param encryptor
+	 * @param encryptor the encryptor used for encryption/decryption
 	 */
 	public FileEncryptor(Encryptor encryptor) {
 		super();
 		this.encryptor = encryptor;
 		this.bufferSize = 65536;
 	}
-	
+
 	/*
 	 * Class methods
 	 */
-	
+
 	/**
 	 * <p>Reads and encrypts file <code>src</code> and writes the encrypted result to file <code>dest</code>.</p>
-	 * @param src
-	 * @param dst
+	 * @param src the source file
+	 * @param dest the destination file
 	 * @throws FileNotFoundException
 	 * @throws GeneralSecurityException
 	 * @throws IOException
@@ -103,11 +103,11 @@ public class FileEncryptor {
 			}
 		}
 	}
-	
+
 	/**
 	 * <p>Reads and decrypts file <code>src</code> and writes the decrypted result to file <code>dest</code>.</p>
-	 * @param src
-	 * @param dest
+	 * @param src the source file
+	 * @param dest the destination file
 	 * @throws FileNotFoundException
 	 * @throws GeneralSecurityException
 	 * @throws IOException
@@ -128,11 +128,11 @@ public class FileEncryptor {
 			}
 		}
 	}
-	
+
 	/**
 	 * <p>Reads data from the <code>InputStream</code> and writes it to the <code>OutputStream</code>.</p>
-	 * @param is
-	 * @param os
+	 * @param is the input stream
+	 * @param os the output stream
 	 * @throws IOException
 	 */
 	private void copy(InputStream is, OutputStream os) throws IOException {
@@ -143,7 +143,7 @@ public class FileEncryptor {
 		}
 		os.flush();
 	}
-	
+
 	/**
 	 * <p>Returns the encryptor.</p>
 	 * @return
@@ -151,7 +151,7 @@ public class FileEncryptor {
 	public Encryptor getEncryptor() {
 		return encryptor;
 	}
-	
+
 	/**
 	 * <p>Returns the buffer size.</p>
 	 * @return
@@ -159,21 +159,21 @@ public class FileEncryptor {
 	public int getBufferSize() {
 		return bufferSize;
 	}
-	
+
 	/**
 	 * <p>Sets the buffer size.</p>
-	 * @param bufferSize
+	 * @param bufferSize the buffer size
 	 */
 	public void setBufferSize(int bufferSize) {
 		this.bufferSize = bufferSize;
 	}
-	
+
 	/*
 	 * Static methods
 	 */
-	
+
 	/**
-	 * 
+	 *
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -187,7 +187,7 @@ public class FileEncryptor {
 				.required()
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("o")
 				.longOpt("out-file")
@@ -197,14 +197,14 @@ public class FileEncryptor {
 				.required()
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("d")
 				.longOpt("decrypt")
 				.desc("decrypt")
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("p")
 				.longOpt("password")
@@ -213,7 +213,7 @@ public class FileEncryptor {
 				.desc("password")
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("k")
 				.longOpt("key")
@@ -222,7 +222,7 @@ public class FileEncryptor {
 				.desc("Base64 encoded key")
 				.build()
 		);
-		
+
 		if(args != null && args.length > 0) {
 			CommandLineParser parser = new DefaultParser();
 			CommandLine cmd;
@@ -231,10 +231,10 @@ public class FileEncryptor {
 			} catch (ParseException e) {
 				throw new RuntimeException("Could not parse args", e);
 			}
-			
+
 			File inFile = new File(cmd.getOptionValue("i"));
 			File outFile = new File(cmd.getOptionValue("o"));
-			
+
 			FileEncryptor fe;
 			if(cmd.hasOption("p")) {
 				fe = new FileEncryptor(cmd.getOptionValue("p"));

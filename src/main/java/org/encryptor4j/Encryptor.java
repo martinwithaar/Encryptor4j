@@ -22,21 +22,21 @@ import javax.crypto.spec.IvParameterSpec;
  * <p>Encryptor class that greatly simplifies strong encryption and decryption.</p>
  * <p>Supports both encryption/decryption of single messages as well as streaming encryption.
  * Handling of initialization vectors (IVs) is done transparently. You can alter this behavior
- * by calling {@link #setPrependIv(boolean)}.</p>
+ * by calling {@link #setPrependIV(boolean)}.</p>
  * <p>You can construct an <code>Encryptor</code> instance with
  * an explicit IV using i.e. {@link Encryptor#Encryptor(Key, String, byte[])} to control IV semantics manually.</p>
- * 
+ *
  * @author Martin
  *
  */
 public class Encryptor {
 
     private static final String DEFAULT_ALGORITHM = "AES";
-    
+
     /*
      * Attributes
      */
-    
+
     private String algorithm;
     private String algorithmProvider;
     private int ivLength;
@@ -47,11 +47,11 @@ public class Encryptor {
     private SecretKeyFactory secretKeyFactory;
     private boolean prependIV;
     private boolean generateIV;
-    
+
     /*
      * Constructor(s)
      */
-    
+
     /**
      * <p>Constructs an <code>Encryptor</code> instance.</p>
      * @param key
@@ -59,7 +59,7 @@ public class Encryptor {
     public Encryptor(Key key) {
     	this(key, DEFAULT_ALGORITHM);
     }
-    
+
     /**
      * <p>Constructs an <code>Encryptor</code> instance.</p>
      * @param key
@@ -68,7 +68,7 @@ public class Encryptor {
     public Encryptor(Key key, String algorithm) {
     	this(key, algorithm, 0);
     }
-    
+
     /**
      * <p>Constructs an <code>Encryptor</code> instance.</p>
      * @param key
@@ -78,7 +78,7 @@ public class Encryptor {
     public Encryptor(Key key, String algorithm, int ivLength) {
     	this(key, algorithm, ivLength, 0);
     }
-    
+
     /**
      * <p>Constructs an <code>Encryptor</code> instance.</p>
      * <p>Use this constructor when using GCM block mode and specify the <code>tLen</code> value.</p>
@@ -94,7 +94,7 @@ public class Encryptor {
     	this.tLen = tLen;
     	this.prependIV = this.generateIV = true;
     }
-    
+
     /**
      * <p>Constructs an <code>Encryptor</code> instance with an explicit IV.</p>
      * @param key
@@ -104,7 +104,7 @@ public class Encryptor {
     public Encryptor(Key key, String algorithm, byte[] iv) {
     	this(key, algorithm, iv, 0);
     }
-    
+
     /**
      * <p>Constructs an <code>Encryptor</code> instance with an explicit IV.</p>
      * <p>Use this constructor when using GCM block mode and specify the <code>tLen</code> value.</p>
@@ -120,7 +120,7 @@ public class Encryptor {
     	this.tLen = tLen;
     	this.prependIV = this.generateIV = false;
     }
-    
+
     /**
      * <p>Constructs an <code>Encryptor</code> instance.</p>
      * @param keySpec
@@ -129,7 +129,7 @@ public class Encryptor {
     public Encryptor(KeySpec keySpec, SecretKeyFactory secretKeyFactory) {
     	this(keySpec, secretKeyFactory, DEFAULT_ALGORITHM, 0);
     }
-    
+
     /**
      * <p>Constructs an <code>Encryptor</code> instance.</p>
      * @param keySpec
@@ -140,7 +140,7 @@ public class Encryptor {
     public Encryptor(KeySpec keySpec, SecretKeyFactory secretKeyFactory, String algorithm, int ivLength) {
     	this(keySpec, secretKeyFactory, DEFAULT_ALGORITHM, ivLength, 0);
     }
-    
+
     /**
      * <p>Constructs an <code>Encryptor</code> instance.</p>
      * <p>Use this constructor when using GCM block mode and specify the <code>tLen</code> value.</p>
@@ -158,7 +158,7 @@ public class Encryptor {
     	this.tLen = tLen;
     	this.prependIV = this.generateIV = true;
     }
-    
+
     /**
      * <p>Constructs an <code>Encryptor</code> instance with an explicit IV.</p>
      * @param keySpec
@@ -169,7 +169,7 @@ public class Encryptor {
     public Encryptor(KeySpec keySpec, SecretKeyFactory secretKeyFactory, String algorithm, byte[] iv) {
     	this(keySpec, secretKeyFactory, DEFAULT_ALGORITHM, iv, 0);
     }
-    
+
     /**
      * <p>Constructs an <code>Encryptor</code> instance with an explicit IV.</p>
      * <p>Use this constructor when using GCM block mode and specify the <code>tLen</code> value.</p>
@@ -187,7 +187,7 @@ public class Encryptor {
     	this.tLen = tLen;
     	this.prependIV = this.generateIV = false;
     }
-    
+
     /*
      * Class methods
      */
@@ -196,7 +196,7 @@ public class Encryptor {
      * <p>Encrypts a byte array and returns the encrypted message.</p>
      * @param message
      * @return
-     * @throws GeneralSecurityException 
+     * @throws GeneralSecurityException
      */
     public byte[] encrypt(byte[] message) throws GeneralSecurityException {
         Cipher cipher = getCipher();
@@ -231,7 +231,7 @@ public class Encryptor {
      * <p>Decrypts a byte array and returns the decrypted message.</p>
      * @param message
      * @return
-     * @throws GeneralSecurityException 
+     * @throws GeneralSecurityException
      */
     public byte[] decrypt(byte[] message) throws GeneralSecurityException {
         Cipher cipher = getCipher();
@@ -251,7 +251,7 @@ public class Encryptor {
         	return cipher.doFinal(message);
         }
     }
-    
+
     /**
      * <p>Returns the initialization vector that has been previously set or was generated by the last call to {@link #encrypt(byte[])}.</p>
      * @return
@@ -259,7 +259,7 @@ public class Encryptor {
     public byte[] getIV() {
     	return iv;
     }
-    
+
 	/**
 	 * <p>Sets whether the initialization vector should be prepended to the encrypted output and can be shifted
 	 * off the start of during decryption.</p>
@@ -270,7 +270,7 @@ public class Encryptor {
 	public void setPrependIV(boolean prependIV) {
 		this.prependIV = prependIV;
 	}
-	
+
 	/**
 	 * <p>Sets whether the initialization vector should be generated by this <code>Encryptor</code> instance.</p>
 	 * @param generateIV
@@ -278,7 +278,7 @@ public class Encryptor {
 	public void setGenerateIV(boolean generateIV) {
 		this.generateIV = generateIV;
 	}
-	
+
 	/**
 	 * <p>Returns the algorithm.</p>
 	 * @return
@@ -286,7 +286,7 @@ public class Encryptor {
 	public String getAlgorithm() {
 		return algorithm;
 	}
-	
+
     /**
      * <p>Sets the algorithm provider.</p>
 	 * @param algorithmProvider
@@ -294,7 +294,7 @@ public class Encryptor {
 	public void setAlgorithmProvider(String algorithmProvider) {
 		this.algorithmProvider = algorithmProvider;
 	}
-	
+
     /**
      * <p>Returns the key. This is either the key that this <code>Encryptor</code> has been constructed with or
      * a key generated by a <code>SecretKeyFactory</code> according to a <code>KeySpec</code>.</p>
@@ -312,7 +312,7 @@ public class Encryptor {
     	}
     	throw new IllegalStateException("Cannot produce key");
     }
-    
+
     /**
      * <p>Wraps an <code>InputStream</code> with a <code>CipherInputStream</code> using this encryptor's cipher.</p>
      * <p>If an <code>ivLength</code> has been specified and <code>prependIV</code> is set to <code>true</code> this method
@@ -320,7 +320,7 @@ public class Encryptor {
      * @param is
      * @return
      * @throws GeneralSecurityException
-     * @throws IOException 
+     * @throws IOException
      */
     public CipherInputStream wrapInputStream(InputStream is) throws GeneralSecurityException, IOException {
     	Cipher cipher = getCipher();
@@ -339,7 +339,7 @@ public class Encryptor {
 		}
 		return new CipherInputStream(is, cipher);
     }
-    
+
     /**
      * <p>Wraps an <code>OutputStream</code> with a <code>CipherOutputStream</code> using this encryptor's cipher.</p>
      * <p>If an <code>ivLength</code> has been specified or an explicit IV has been set during construction
@@ -347,7 +347,7 @@ public class Encryptor {
      * @param os
      * @return
      * @throws GeneralSecurityException
-     * @throws IOException 
+     * @throws IOException
      */
     public CipherOutputStream wrapOutputStream(OutputStream os) throws GeneralSecurityException, IOException {
     	Cipher cipher = getCipher();
@@ -367,11 +367,11 @@ public class Encryptor {
 		}
    		return new CipherOutputStream(os, cipher);
     }
-    
+
     /**
      * <p>Returns the cipher.</p>
      * @return
-     * @throws GeneralSecurityException 
+     * @throws GeneralSecurityException
      */
     private Cipher getCipher() throws GeneralSecurityException {
         if(algorithmProvider != null) {
@@ -380,7 +380,7 @@ public class Encryptor {
         	return Cipher.getInstance(algorithm);
         }
     }
-    
+
     /**
      * <p>Returns the algorithm parameter specification.</p>
      * @param message
@@ -390,7 +390,7 @@ public class Encryptor {
     	int length = ivLength == 0  && ivBuffer != null ? ivBuffer.length : ivLength;
     	return tLen > 0 ? new GCMParameterSpec(tLen, ivBuffer, 0, length) : new IvParameterSpec(ivBuffer, 0, length);
     }
-    
+
     /**
      * <p>Generates an initialization vector.</p>
      */

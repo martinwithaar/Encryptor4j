@@ -13,12 +13,12 @@ import org.encryptor4j.util.TextEncryptor;
 import org.junit.Test;
 
 /**
- * 
+ *
  * @author Martin
  *
  */
 public class UtilTest {
-	
+
 	private static final String FILENAME = "test_picture.jpg";
 	private static final String FILENAME_ENCRYPTED = "test_picture.jpg.encrypted";
 	private static final String FILENAME_DECRYPTED = "test_picture_util.jpg";
@@ -33,7 +33,7 @@ public class UtilTest {
 		fe.decrypt(encryptedFile, decryptedFile);
 		assertTrue(FileUtils.contentEquals(srcFile, decryptedFile));
 	}
-	
+
 	@Test
 	public void testEncryptedText() throws GeneralSecurityException {
 		String message = "This is a short test message";
