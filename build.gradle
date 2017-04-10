@@ -9,10 +9,15 @@
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 targetCompatibility = '1.7'
 sourceCompatibility = '1.7'
 
+group = "com.github.martinwithaar"
+archivesBaseName = "encryptor4j"
+version = "0.1"
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -34,4 +39,86 @@ dependencies {
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+/*
+Add the following to gradle.properties:
+signing.keyId
+signing.password
+signing.secretKeyRingFile
+ */
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        // add the following to gradle.properties:
+        // ossrhUsername, ossrhPassword
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+        // optional proxy if running behind a firewall (comment the following line if no proxy)
+        proxy(host: proxyHost, port: proxyPort as int, type: 'http')
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        // add the following to gradle.properties:
+        // ossrhUsername, ossrhPassword
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+        // optional proxy if running behind a firewall (comment the following line if no proxy)
+        proxy(host: proxyHost, port: proxyPort as int, type: 'http')
+      }
+
+      pom.project {
+        name 'Encryptor4j'
+        packaging 'jar'
+        artifactId 'encryptor4j'
+        description 'Strong encryption for Java simplified'
+        url 'https://github.com/martinwithaar/Encryptor4j'
+
+        scm {
+          connection 'scm:git:git://github.com/martinwithaar/Encryptor4j.git'
+          developerConnection 'scm:git:ssh://github.com:martinwithaar/Encryptor4j.git'
+          url 'https://github.com/martinwithaar/Encryptor4j/tree/master'
+        }
+
+        licenses {
+          license {
+            name 'MIT License'
+            url 'https://github.com/martinwithaar/Encryptor4j/blob/master/LICENSE'
+          }
+        }
+
+        developers {
+          developer {
+            id 'martinwithaar'
+            name 'Martin Withaar'
+            email 'martin.withaar@gmail.com'
+          }
+          developer {
+            id 'sishbi'
+            name 'Simon Billingsley'
+            email 'simon@sishbi.me.uk'
+          }
+        }
+      }
+    }
+  }
 }
