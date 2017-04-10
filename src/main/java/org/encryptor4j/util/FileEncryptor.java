@@ -81,13 +81,10 @@ public class FileEncryptor {
 
 	/**
 	 * <p>Reads and encrypts file <code>src</code> and writes the encrypted result to file <code>dest</code>.</p>
-<<<<<<< HEAD
 	 * @param src the source file
 	 * @param dest the destination file
-=======
 	 * @param src
 	 * @param dest
->>>>>>> branch 'master' of https://github.com/martinwithaar/Encryptor4j.git
 	 * @throws FileNotFoundException
 	 * @throws GeneralSecurityException
 	 * @throws IOException
