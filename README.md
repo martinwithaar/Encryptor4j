@@ -1,3 +1,5 @@
+[![Android Arsenal](https://img.shields.io/badge/Android_Arsenal-Encryptor4j-brightgreen.svg)](https://android-arsenal.com/details/1/5573)
+
 # Encryptor4j
 Strong encryption for Java simplified
 
