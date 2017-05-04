@@ -32,33 +32,33 @@ import javax.crypto.KeyGenerator;
  *
  */
 public class MessageTest {
-	
+
 	private static final int KEY_SIZE = 256;
-	
+
 	static {
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 	}
-	
+
 	// AES
-	
+
     @Test public void testAES_ECB() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using AES in Electronic Codebook mode";
-		Encryptor encryptor = new Encryptor(KeyFactory.AES.randomKey(), "AES/ECB/PKCS7Padding");
+		Encryptor encryptor = new Encryptor(KeyFactory.AES.randomKey(), "AES/ECB/PKCS5Padding");
 		encryptor.setAlgorithmProvider("BC");
 		byte[] encrypted = encryptor.encrypt(message.getBytes());
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     @Test public void testAES_CBC() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using AES in Cipher Block Chaining mode";
-		Encryptor encryptor = new Encryptor(KeyFactory.AES.randomKey(), "AES/CBC/PKCS7Padding", 16);
+		Encryptor encryptor = new Encryptor(KeyFactory.AES.randomKey(), "AES/CBC/PKCS5Padding", 16);
 		encryptor.setAlgorithmProvider("BC");
 		byte[] encrypted = encryptor.encrypt(message.getBytes());
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     @Test public void testAES_CTR() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using AES in Counter mode";
 		Encryptor encryptor = new Encryptor(KeyFactory.AES.randomKey(), "AES/CTR/NoPadding", 16);
@@ -67,7 +67,7 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     @Test public void testAES_CFB() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using AES in Cipher Feedback mode";
 		Encryptor encryptor = new Encryptor(KeyFactory.AES.randomKey(), "AES/CFB/NoPadding", 16);
@@ -76,7 +76,7 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     @Test public void testAES_OFB() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using AES in Output Feedback mode";
 		Encryptor encryptor = new Encryptor(KeyFactory.AES.randomKey(), "AES/OFB/NoPadding", 16);
@@ -85,7 +85,7 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     @Test public void testAES_GCM() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using AES in Galois Counter Mode";
 		Encryptor encryptor = new Encryptor(KeyFactory.AES.randomKey(), "AES/GCM/NoPadding", 16, 128);
@@ -94,9 +94,9 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     // DES
-    
+
     @Test public void testDES_ECB() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using DES in Electronic Codebook mode";
 		Encryptor encryptor = new Encryptor(KeyFactory.DES.randomKey(), "DES/ECB/PKCS5Padding");
@@ -105,7 +105,7 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     @Test public void testDES_CBC() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using DES in Cipher Block Chaining mode";
 		Encryptor encryptor = new Encryptor(KeyFactory.DES.randomKey(), "DES/CBC/PKCS5Padding", 8);
@@ -114,7 +114,7 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     @Test public void testDES_CTR() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using DES in Counter mode";
 		Encryptor encryptor = new Encryptor(KeyFactory.DES.randomKey(), "DES/CTR/NoPadding", 8);
@@ -123,7 +123,7 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     @Test public void testDES_CFB() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using DES in Cipher Feedback mode";
 		Encryptor encryptor = new Encryptor(KeyFactory.DES.randomKey(), "DES/CFB/NoPadding", 8);
@@ -132,7 +132,7 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     @Test public void testDES_OFB() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using DES in Output Feedback mode";
 		Encryptor encryptor = new Encryptor(KeyFactory.DES.randomKey(), "DES/OFB/NoPadding", 8);
@@ -141,26 +141,26 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     // RSA
-    
+
     @Test public void testRSA() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using RSA";
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
-    	
+
 		Encryptor encryptor = new Encryptor(keyPair.getPublic(), "RSA");
 		encryptor.setAlgorithmProvider("BC");
 		byte[] encrypted = encryptor.encrypt(message.getBytes());
-		
+
 		Encryptor decryptor = new Encryptor(keyPair.getPrivate(), "RSA");
 		decryptor.setAlgorithmProvider("BC");
 		byte[] decrypted = decryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     // Blowfish
-    
+
     @Test public void testBlowfish() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using Blowfish";
 		Encryptor encryptor = new Encryptor(randomKey("Blowfish", KEY_SIZE), "Blowfish");
@@ -169,7 +169,7 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     @Test public void testTwofish() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using Twofish";
 		Encryptor encryptor = new Encryptor(randomKey("Twofish", KEY_SIZE), "Twofish");
@@ -178,9 +178,9 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     // ARC4
-    
+
     @Test public void testARC4() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using ARC4";
 		Encryptor encryptor = new Encryptor(randomKey("ARC4", KEY_SIZE), "ARC4");
@@ -189,9 +189,9 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     // RC2
-    
+
     @Test public void testRC2() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using RC2";
 		Encryptor encryptor = new Encryptor(randomKey("RC2", KEY_SIZE), "RC2");
@@ -200,9 +200,9 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     // RC4
-    
+
     @Test public void testRC4() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using RC4";
 		Encryptor encryptor = new Encryptor(randomKey("RC4", KEY_SIZE), "RC4");
@@ -211,9 +211,9 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     // RC5
-    
+
     @Test public void testRC5() throws GeneralSecurityException {
     	String message = "This string has been encrypted & decrypted using RC5";
 		Encryptor encryptor = new Encryptor(randomKey("RC5", KEY_SIZE), "RC5");
@@ -222,13 +222,13 @@ public class MessageTest {
 		byte[] decrypted = encryptor.decrypt(encrypted);
 		assertEquals(message, new String(decrypted));
     }
-    
+
     /*
      * Static methods
      */
-    
+
     /**
-     * 
+     *
      * @param algorithm
      * @param size
      * @return

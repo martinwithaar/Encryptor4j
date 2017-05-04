@@ -24,7 +24,6 @@ public interface EncryptorFactory {
 	 * @return
 	 */
 	Encryptor messageEncryptor(Key key);
-
 	/**
 	 * <p>Returns an <code>Encryptor</code> instance usable for stream encryption.</p>
 	 * @param key
