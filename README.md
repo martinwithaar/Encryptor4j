@@ -7,6 +7,12 @@ Strong encryption for Java simplified
 Encryptor4j consists of a set of wrapper and utility classes that make leveraging cryptography in your application alot easier.
 It enables developers to encrypt and decrypt with little room for error, using few lines of code and supports all popular encryption algorithms such as AES, DES, RSA etc.
 
+## Get it
+Add this line to your *build.gradle*'s dependencies:
+```
+compile 'org.encryptor4j:encryptor4j:0.1'
+```
+
 ## Encryption
 *Encryptor* is a small wrapper class for Java that greatly reduces boilerplate when implementing cryptography in an application.
 It handles initialization vectors (IVs) transparently by securely generating and prepending them to the encrypted message. The IV is then read and used for decryption at a later time.
