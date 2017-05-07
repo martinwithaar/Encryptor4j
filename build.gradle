@@ -17,7 +17,7 @@ sourceCompatibility = '1.7'
 
 group = "org.encryptor4j"
 archivesBaseName = "encryptor4j"
-version = "0.1"
+version = "0.1.1"
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -55,12 +55,6 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
-/*
-Add the following to gradle.properties:
-signing.keyId
-signing.password
-signing.secretKeyRingFile
- */
 signing {
     sign configurations.archives
 }
@@ -71,16 +65,12 @@ uploadArchives {
       beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
       repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-        // add the following to gradle.properties:
-        // ossrhUsername, ossrhPassword
         authentication(userName: ossrhUsername, password: ossrhPassword)
         // optional proxy if running behind a firewall (comment the following line if no proxy)
         // proxy(host: proxyHost, port: proxyPort as int, type: 'http')
       }
 
       snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-        // add the following to gradle.properties:
-        // ossrhUsername, ossrhPassword
         authentication(userName: ossrhUsername, password: ossrhPassword)
         // optional proxy if running behind a firewall (comment the following line if no proxy)
         // proxy(host: proxyHost, port: proxyPort as int, type: 'http')
