@@ -199,6 +199,17 @@ public class Encryptor {
      * @throws GeneralSecurityException
      */
     public byte[] encrypt(byte[] message) throws GeneralSecurityException {
+    	return encrypt(message, null);
+    }
+
+    /**
+     * <p>Encrypts a byte array and returns the encrypted message.</p>
+     * @param message
+     * @param aad
+     * @return
+     * @throws GeneralSecurityException
+     */
+    public byte[] encrypt(byte[] message, byte[] aad) throws GeneralSecurityException {
         Cipher cipher = getCipher();
         if(!generateIV) {
         	iv = null;
@@ -211,13 +222,22 @@ public class Encryptor {
     		cipher.init(Cipher.ENCRYPT_MODE, getKey());
     		iv = cipher.getIV();
         }
+        if(aad != null) {
+        	cipher.updateAAD(aad);
+        }
         byte[] encrypted;
        	if(prependIV && iv != null) {
        		int outputSize = cipher.getOutputSize(message.length);
        		encrypted = new byte[iv.length + outputSize];
        		System.arraycopy(iv, 0, encrypted, 0, iv.length);
        		try {
-				cipher.doFinal(message, 0, message.length, encrypted, iv.length);
+				int nBytes = cipher.doFinal(message, 0, message.length, encrypted, iv.length);
+				if(nBytes < outputSize) {
+					int excessBytes = outputSize - nBytes;
+					byte[] resized = new byte[encrypted.length - excessBytes];
+					System.arraycopy(encrypted, 0, resized, 0, resized.length);
+					encrypted = resized;
+				}
 			} catch (ShortBufferException e) {
 				throw new RuntimeException(e);
 			}
@@ -234,10 +254,25 @@ public class Encryptor {
      * @throws GeneralSecurityException
      */
     public byte[] decrypt(byte[] message) throws GeneralSecurityException {
+    	return decrypt(message, null);
+    }
+
+    /**
+     * <p>Decrypts a byte array and returns the decrypted message.</p>
+     * @param message
+     * @param aad
+     * @return
+     * @throws GeneralSecurityException
+     */
+    public byte[] decrypt(byte[] message, byte[] aad) throws GeneralSecurityException {
         Cipher cipher = getCipher();
+
         if(ivLength > 0) {
         	if(prependIV) {
 	        	cipher.init(Cipher.DECRYPT_MODE, getKey(), getAlgorithmParameterSpec(message));
+	        	if(aad != null) {
+	            	cipher.updateAAD(aad);
+	            }
 	        	return cipher.doFinal(message, ivLength, message.length - ivLength);
         	} else {
         		throw new IllegalStateException("Could not obtain IV");
@@ -248,6 +283,9 @@ public class Encryptor {
         	} else {
         		cipher.init(Cipher.DECRYPT_MODE, getKey());
         	}
+        	if(aad != null) {
+            	cipher.updateAAD(aad);
+            }
         	return cipher.doFinal(message);
         }
     }
@@ -373,7 +411,7 @@ public class Encryptor {
      * @return
      * @throws GeneralSecurityException
      */
-    private Cipher getCipher() throws GeneralSecurityException {
+    public Cipher getCipher() throws GeneralSecurityException {
         if(algorithmProvider != null) {
         	return Cipher.getInstance(algorithm, algorithmProvider);
         } else {
@@ -388,7 +426,11 @@ public class Encryptor {
      */
     private AlgorithmParameterSpec getAlgorithmParameterSpec(byte[] ivBuffer) {
     	int length = ivLength == 0  && ivBuffer != null ? ivBuffer.length : ivLength;
-    	return tLen > 0 ? new GCMParameterSpec(tLen, ivBuffer, 0, length) : new IvParameterSpec(ivBuffer, 0, length);
+    	String[] parts = algorithm.split("/");
+		if(parts.length > 1 && parts[1].equalsIgnoreCase("GCM")) {
+			return new GCMParameterSpec(tLen > 0 ? tLen: 128, ivBuffer, 0, length);
+		}
+    	return new IvParameterSpec(ivBuffer, 0, length);
     }
 
     /**
