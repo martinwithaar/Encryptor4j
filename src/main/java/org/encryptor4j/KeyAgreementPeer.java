@@ -13,52 +13,65 @@ import javax.crypto.KeyAgreement;
  *
  */
 public abstract class KeyAgreementPeer {
-	
+
 	/*
 	 * Attributes
 	 */
 
 	private KeyAgreement keyAgreement;
 	private KeyPair keyPair;
-	
+
 	/*
 	 * Constructor(s)
 	 */
-	
+
 	/**
 	 * <p>Constructs a key agreement peer.</p>
 	 * @param keyAgreement
 	 * @throws GeneralSecurityException
 	 */
 	public KeyAgreementPeer(KeyAgreement keyAgreement) throws GeneralSecurityException {
-		this.keyAgreement = keyAgreement;
+		this(keyAgreement, null);
 	}
-	
+
+	/**
+	 * <p>Constructs a key agreement peer.</p>
+	 * @param keyAgreement
+	 * @param keyPair
+	 * @throws GeneralSecurityException
+	 */
+	public KeyAgreementPeer(KeyAgreement keyAgreement, KeyPair keyPair) throws GeneralSecurityException {
+		this.keyAgreement = keyAgreement;
+		this.keyPair = keyPair;
+	}
+
 	/*
 	 * Abstract methods
 	 */
-	
+
 	/**
-	 * <p>Creates this peer's key pair.</p>
+	 * <p>Creates this peer's key pair if none has been provided upon construction.</p>
 	 * @return
 	 * @throws GeneralSecurityException
 	 */
 	protected abstract KeyPair createKeyPair() throws GeneralSecurityException;
-	
+
 	/*
 	 * Class methods
 	 */
-	
+
 	/**
 	 * <p>Creates a keypair and initializes the key agreement.</p>
-	 * @throws GeneralSecurityException 
-	 * 
+	 * @throws GeneralSecurityException
+	 *
 	 */
 	protected void initialize() throws GeneralSecurityException {
-		this.keyPair = createKeyPair();
-		this.keyAgreement.init(keyPair.getPrivate());
+		if(keyPair == null) {
+			keyPair = createKeyPair();
+		}
+		keyAgreement.init(keyPair.getPrivate());
 	}
-	
+
 	/**
 	 * <p>Computes the shared secret using the other peer's public key.</p>
 	 * @param key
@@ -69,7 +82,7 @@ public abstract class KeyAgreementPeer {
 		keyAgreement.doPhase(key, true);
 		return keyAgreement.generateSecret();
 	}
-	
+
 	/**
 	 * <p>Returns this peer's public key.</p>
 	 * @return
@@ -77,7 +90,7 @@ public abstract class KeyAgreementPeer {
 	public Key getPublicKey() {
 		return keyPair.getPublic();
 	}
-	
+
 	/**
 	 * <p>Returns this peer's <code>KeyAgreement</code> instance.</p>
 	 * @return
