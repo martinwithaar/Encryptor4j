@@ -24,7 +24,7 @@ public class UtilTest {
 	private static final String FILENAME_DECRYPTED = "test_picture_util.jpg";
 
 	@Test
-	public void testEncryptedFile() throws FileNotFoundException, GeneralSecurityException, IOException {
+	public void testEncryptedFile() throws GeneralSecurityException, IOException {
 		File srcFile = new File(FILENAME);
 		File encryptedFile = new File(FILENAME_ENCRYPTED);
 		File decryptedFile = new File(FILENAME_DECRYPTED);

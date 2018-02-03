@@ -11,11 +11,11 @@ public interface KeyFactory {
 	/**
 	 * AES <code>KeyFactory</code> implementation
 	 */
-	public static final KeyFactory AES = new AESKeyFactory();
+    KeyFactory AES = new AESKeyFactory();
 	/**
 	 * AES <code>KeyFactory</code> implementation
 	 */
-	public static final KeyFactory DES = new DESKeyFactory();
+    KeyFactory DES = new DESKeyFactory();
 	/**
 	 * <p>Derives and returns a strong key from a password.</p>
 	 * @param password

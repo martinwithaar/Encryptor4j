@@ -89,7 +89,7 @@ public class FileEncryptor {
 	 * @throws GeneralSecurityException
 	 * @throws IOException
 	 */
-	public void encrypt(File src, File dest) throws FileNotFoundException, GeneralSecurityException, IOException {
+	public void encrypt(File src, File dest) throws GeneralSecurityException, IOException {
 		InputStream is = null;
 		OutputStream os = null;
 		try {
@@ -114,7 +114,7 @@ public class FileEncryptor {
 	 * @throws GeneralSecurityException
 	 * @throws IOException
 	 */
-	public void decrypt(File src, File dest) throws FileNotFoundException, GeneralSecurityException, IOException {
+	public void decrypt(File src, File dest) throws GeneralSecurityException, IOException {
 		InputStream is = null;
 		OutputStream os = null;
 		try {

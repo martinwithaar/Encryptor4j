@@ -22,13 +22,13 @@ import org.apache.commons.cli.ParseException;
 
 /**
  * <p>One-time pad implementation.</p>
- * 
+ *
  * <p></p>
  * @author Martin
  *
  */
 public class OneTimePad {
-	
+
 	/*
 	 * Attributes
 	 */
@@ -37,51 +37,47 @@ public class OneTimePad {
 	private int ioBufferSize;
 	private int workBufferSize;
 	private boolean zeroFill;
-	
+
 	/*
 	 * Constructor(s)
 	 */
-	
+
 	/**
 	 * <p>Constructs a default <code>OneTimePad</code> instance.</p>
-	 * @throws NoSuchAlgorithmException
 	 */
 	public OneTimePad() {
 		this(1024 * 1024, 256 * 1024);
 	}
-	
+
 	/**
 	 * <p>Constructs a <code>OneTimePad</code> instance with custom buffer sizes.</p>
 	 * @param ioBufferSize
 	 * @param workBufferSize
-	 * @throws NoSuchAlgorithmException
 	 */
 	public OneTimePad(int ioBufferSize, int workBufferSize) {
 		this(new SecureRandom(), ioBufferSize, workBufferSize);
 	}
-	
+
 	/**
 	 * <p>Constructs a <code>OneTimePad</code> instance with custom random source and buffer sizes.</p>
 	 * @param random
 	 * @param ioBufferSize
 	 * @param workBufferSize
-	 * @throws NoSuchAlgorithmException
 	 */
 	public OneTimePad(SecureRandom random, int ioBufferSize, int workBufferSize) {
 		this.random = random;
 		this.ioBufferSize = ioBufferSize;
 		this.workBufferSize = workBufferSize;
 	}
-	
+
 	/*
 	 * Class methods
 	 */
-	
+
 	/**
 	 * <p>Creates a padfile containing random bytes.</p>
 	 * @param padFile
 	 * @param size
-	 * @throws IOException
 	 */
 	public void createPadFile(File padFile, long size) {
 		OutputStream os = null;
@@ -114,7 +110,7 @@ public class OneTimePad {
 			}
 		}
 	}
-	
+
 	/**
 	 * <p>Reads bytes from <code>inFile</code>, pads them with corresponding offset bytes from <code>padFile</code>
 	 * and writes them to <code>outFile</code>.</p>
@@ -124,7 +120,6 @@ public class OneTimePad {
 	 * @param padFile
 	 * @param offset
 	 * @return
-	 * @throws IOException
 	 */
 	public long padData(File inFile, File outFile, File padFile, long offset) {
 		RandomAccessFile raf = null;
@@ -133,15 +128,15 @@ public class OneTimePad {
 		try {
 			raf = new RandomAccessFile(padFile, zeroFill ? "rw" : "r");
 			raf.seek(offset);
-			
+
 			is = new BufferedInputStream(new FileInputStream(inFile), ioBufferSize);
 			os = new BufferedOutputStream(new FileOutputStream(outFile), ioBufferSize);
-			
+
 			byte[] padBytes = new byte[workBufferSize];
 			byte[] bytes = new byte[workBufferSize];
 			int nPadBytes;
 			int nBytes;
-			
+
 			while(true) {
 				nBytes = is.read(bytes);
 				nPadBytes = raf.read(padBytes);
@@ -152,7 +147,7 @@ public class OneTimePad {
 							bytes[i] = (byte) (bytes[i] ^ padBytes[i]);
 						}
 						os.write(bytes, 0, nBytes);
-						
+
 						if(zeroFill) {
 							// Perform zero-filling
 							raf.seek(offset);
@@ -196,7 +191,7 @@ public class OneTimePad {
 			}
 		}
 	}
-	
+
 	/**
 	 * <p>Sets whether padding bytes should be set to <code>0</code> when they have been used.
 	 * This potentially increases security because the message can only be padded and unpadded once.</p>
@@ -205,13 +200,13 @@ public class OneTimePad {
 	public void setZeroFill(boolean zeroFill) {
 		this.zeroFill = zeroFill;
 	}
-	
+
 	/*
 	 * Static methods
 	 */
-	
+
 	/**
-	 * 
+	 *
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -224,7 +219,7 @@ public class OneTimePad {
 				.desc("create pad file")
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("p")
 				.longOpt("pad")
@@ -233,7 +228,7 @@ public class OneTimePad {
 				.desc("pad file")
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("f")
 				.longOpt("offset")
@@ -242,7 +237,7 @@ public class OneTimePad {
 				.desc("offset")
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("s")
 				.longOpt("size")
@@ -251,7 +246,7 @@ public class OneTimePad {
 				.desc("size")
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("i")
 				.longOpt("in-file")
@@ -260,7 +255,7 @@ public class OneTimePad {
 				.desc("input file")
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("o")
 				.longOpt("out-file")
@@ -269,14 +264,14 @@ public class OneTimePad {
 				.desc("output file")
 				.build()
 		);
-		
+
 		options.addOption(
 			Option.builder("z")
 				.longOpt("zerofill")
 				.desc("overwrite used padding with 0s")
 				.build()
 		);
-		
+
 		if(args != null && args.length > 0) {
 			CommandLineParser parser = new DefaultParser();
 			CommandLine cmd;
