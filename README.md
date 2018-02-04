@@ -5,8 +5,9 @@ Strong encryption for Java simplified
 
 ## Get it
 Add this line to your *build.gradle*'s dependencies:
+
 ```
-compile 'org.encryptor4j:encryptor4j:0.1.1'
+compile 'org.encryptor4j:encryptor4j:0.1.2'
 ```
 
 ## Overview
@@ -19,6 +20,7 @@ It handles initialization vectors (IVs) transparently by securely generating and
 
 ### Message encryption
 Encrypting a message using AES in CBC mode is as simple as this:
+
 ```java
 String message = "This string has been encrypted & decrypted using AES in Cipher Block Chaining mode";
 SecretKey secretKey = KeyFactory.AES.randomKey();
@@ -27,6 +29,7 @@ byte[] encrypted = encryptor.encrypt(message.getBytes());
 ```
 
 Using AES in GCM mode needs an additional *tLen* value in the constructor:
+
 ```java
 String message = "This string has been encrypted & decrypted using AES in Galois Counter Mode";
 SecretKey secretKey = KeyFactory.AES.randomKey();
@@ -35,6 +38,7 @@ byte[] encrypted = encryptor.encrypt(message.getBytes());
 ```
 
 Decrypting a message is done like this:
+
 ```java
 // Assuming the same secret key is used
 Encryptor encryptor = new Encryptor(secretKey, "AES/GCM/NoPadding", 16, 128);
@@ -48,6 +52,7 @@ Streaming encryption can be done with relative ease: Just wrap any existing *Inp
 The *Encryptor* will prepend the IV transparently and use the cipher that it has been constructed with.
 
 The following example reads a file and writes it to another file using streaming encryption:
+
 ```java
 SecretKey secretKey = KeyFactory.AES.randomKey();
 Encryptor encryptor = new Encryptor(secretKey, "AES/CTR/NoPadding", 16);
@@ -74,6 +79,7 @@ try {
 ```
 
 Decryption:
+
 ```java
 // Assuming the same secret key is used
 Encryptor encryptor = new Encryptor(secretKey, "AES/CTR/NoPadding", 16);
@@ -107,6 +113,7 @@ Encryptor4j comes with utility classes for performing common encryption tasks.
 The *FileEncryptor* class encrypts and decrypts files and can be invoked from the command line.
 
 Encryption:
+
 ```java
 File srcFile = new File("original.zip");
 File destFile = new File("original.zip.encrypted");
@@ -116,6 +123,7 @@ fe.encrypt(srcFile, destFile);
 ```
 
 Decryption:
+
 ```java
 File srcFile = new File("original.zip.encrypted");
 File destFile = new File("decrypted.zip");
@@ -130,6 +138,7 @@ By default *FileEncryptor* uses AES in CTR mode with the maximum key length perm
 The *TextEncryptor* class encrypts and decrypts text using Base64 encoding for the encrypted message and can be invoked from the command line.
 
 Encryption:
+
 ```java
 String text = "This is a secret message";
 String password = "mysupersecretpassword";
@@ -138,6 +147,7 @@ String encrypted = te.encrypt(text);
 ```
 
 Decryption:
+
 ```java
 String encrypted = "5Zz0WGJ5XK1YDxs7O5VX7nhBaNeFWnvz/RBxmfawammmkNZhWeTJkMIQ/RWIPDmx";
 String password = "mysupersecretpassword";
@@ -152,6 +162,7 @@ Key agreement protocols such as Diffie-Hellman and Elliptic Curve Diffie-Hellman
 Encryptor4j comes with wrapper classes that further simplify these processes.
 
 A simple DH key agreement can be written like this:
+
 ```java
 // Create primes p & g
 // Tip: You don't need to regenerate p; Use a fixed value in your application
@@ -169,6 +180,7 @@ byte[] sharedSecretB = peerB.computeSharedSecret(peerA.getPublicKey());
 ```
 
 an ECDH key agreement like this:
+
 ```java
 String algorithm = "brainpoolp256r1";
 
@@ -194,25 +206,38 @@ Encryptor encryptor = new Encryptor(secretKey, "AES/CTR/NoPadding", 16);
 When using block modes that need an IV the *Encryptor* instance handles the generation and prepending automatically.
 This behavior can be overridden by using an explicit IV or by not prepending the IV when a custom means of transmission is required.
 
-Construct an *Encryptor* instance using an explicit IV:
+Encrypt data using an explicit IV:
+
 ```java
-SecretKey secretKey = KeyFactory.AES.randomKey();
+Encryptor encryptor = new Encryptor(secretKey, "AES/CBC/PKCS5Padding", 16);
 byte[] iv = new byte[] { 107, 67, 98, -81, 54, -31, -110, -63, 24, 76, -12, -48, -55, 14, 15, 19 };
-Encryptor encryptor = new Encryptor(secretKey, "AES/CBC/PKCS5Padding", iv);
+byte[] encrypted = encryptor.encrypt(data, null, iv);
 ```
 
 Disable prepending of the IV by calling:
+
 ```java
 encryptor.setPrependIV(false);
 ```
 
-**Note:** Constructing an *Encryptor* with an explicit IV will set `prependIV` to `false` automatically.
+You will have to store the IV yourself in order to properly decrypt a ciphertext.
 
 ## Disable IV generation
 Sometimes the *Cipher* implementation used by the VM does not permit passing the IV via the algorithm parameters because it will generate it itself (such as with some versions of Android). The automatic IV generation functionality of the *Encryptor* class should then be disabled like so:
+
 ```java
 encryptor.setGenerateIV(false);
 ```
+
+## AEAD and Additional Authentication Data (AAD)
+When using an AEAD (authenticated encryption with associated data) blockmode such as GCM it is possible to include additional associated data when encrypting or decrypting:
+
+```java
+byte[] aad = new byte[] { 74, 17, -123, -27, 21, 46, 57, 18, 111, -102, 98, -84, 8, -68, -23, 72 };
+byte[] encrypted = encryptor.encrypt(message.getBytes(), aad);
+```
+
+This can be used to enhance the authentication strength of a cryptographic protocol if properly designed.
 
 ## Best practices
 Encryption does not guarantee security out-of-the-box. A certain degree of understanding is required to choose the correct algorithm, block cipher mode, key size etc.
