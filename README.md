@@ -18,6 +18,8 @@ It enables developers to encrypt and decrypt with little room for error, using f
 *Encryptor* is a small wrapper class for Java that greatly reduces boilerplate when implementing cryptography in an application.
 It handles initialization vectors (IVs) transparently by securely generating and prepending them to the encrypted message. The IV is then read and used for decryption at a later time.
 
+The Encryptor class is thread-safe and can thus be used by multiple threads.
+
 ### Message encryption
 Encrypting a message using AES in CBC mode is as simple as this:
 
