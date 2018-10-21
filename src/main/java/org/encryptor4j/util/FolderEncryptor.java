@@ -28,8 +28,7 @@ import org.encryptor4j.factory.EncryptorFactory;
 import org.encryptor4j.factory.KeyFactory;
 
 /**
- * <p>Class for encrypting and decrypting files.</p>
- * @author Martin
+ * <p>Class for encrypting and decrypting folders.</p>
  *
  */
 public class FolderEncryptor {
