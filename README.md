@@ -1,3 +1,4 @@
+[![Maven Central](https://img.shields.io/badge/Maven%20Central-0.1.2-blue.svg)](https://mvnrepository.com/artifact/org.encryptor4j/encryptor4j/0.1.2)
 [![Android Arsenal](https://img.shields.io/badge/Android_Arsenal-Encryptor4j-brightgreen.svg)](https://android-arsenal.com/details/1/5573)
 
 # Encryptor4j
